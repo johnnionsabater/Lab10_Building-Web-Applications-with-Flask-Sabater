@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>Student List</h2>
+    <p class="role-summary">
+        Logged in as <strong>{{ current_user.display_name }}</strong>
+        ({{ current_user.role|title }})
+    </p>
+
+    {% if current_user.role == "admin" %}
+    <form class="student-form" method="POST" action="{{ url_for('add_student') }}">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <button class="btn" type="submit">Add Student</button>
+    </form>
+    {% else %}
+    <p class="read-only-note">
+        Read-only mode: viewer accounts can see the student list but cannot add or
+        delete records.
+    </p>
+    {% endif %}
+
+    {% if students %}
+    <ul class="student-list">
+        {% for student in students %}
+        <li>
+            <span>{{ student.full_name }} ({{ student.email }})</span>
+            {% if current_user.role == "admin" %}
+            <a class="delete-link" href="{{ url_for('delete_student', id=student.id) }}">Delete</a>
+            {% else %}
+            <span class="viewer-badge">View Only</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No students added yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

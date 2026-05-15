@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<section class="card form-card">
+    <h2>Register</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <label for="display_name">{{ form.display_name.label.text }}</label>
+        {{ form.display_name(id="display_name", placeholder="Enter your display name") }}
+
+        <label for="email">{{ form.email.label.text }}</label>
+        {{ form.email(id="email", placeholder="Enter your email") }}
+
+        <label for="role">{{ form.role.label.text }}</label>
+        {{ form.role(id="role") }}
+
+        <label for="password">{{ form.password.label.text }}</label>
+        {{ form.password(id="password", placeholder="Create a password") }}
+
+        {{ form.submit(class_="btn") }}
+    </form>
+
+    <p class="helper-text">For lab testing, you may register as either an admin or a viewer.</p>
+</section>
+{% endblock %}

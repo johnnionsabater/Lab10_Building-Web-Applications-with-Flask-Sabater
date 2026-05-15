@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="dashboard-grid">
+    <article class="card profile-card">
+        <div class="profile-header">
+            {% if user.image_filename %}
+            <img
+                class="profile-image"
+                src="{{ url_for('static', filename='uploads/' + user.image_filename) }}"
+                alt="{{ user.display_name }}"
+            >
+            {% else %}
+            <div class="profile-placeholder">{{ user.display_name[:1]|upper }}</div>
+            {% endif %}
+
+            <div>
+                <h2>{{ user.display_name }}</h2>
+                <p class="muted">{{ user.email }}</p>
+                <span class="role-badge">{{ user.role|title }}</span>
+            </div>
+        </div>
+
+        <p class="dashboard-note">
+            {% if current_user.role == "admin" %}
+            You have admin access and can add or delete student records.
+            {% else %}
+            You have viewer access and can only see the student list.
+            {% endif %}
+        </p>
+
+        <p>
+            <a class="btn link-btn" href="{{ url_for('students') }}">Open Student List</a>
+        </p>
+    </article>
+
+    <article class="card form-card">
+        <h2>Update Profile</h2>
+        <form method="POST" action="{{ url_for('update_profile') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <label for="display_name">{{ form.display_name.label.text }}</label>
+            {{ form.display_name(id="display_name", placeholder="Enter your display name") }}
+
+            <label for="profile_image">{{ form.profile_image.label.text }}</label>
+            {{ form.profile_image(id="profile_image", accept=".jpg,.jpeg,.png") }}
+
+            {{ form.submit(class_="btn") }}
+        </form>
+
+        <p class="helper-text">
+            Allowed file types: .jpg, .jpeg, .png. Uploaded images are stored in
+            <code>/static/uploads</code>.
+        </p>
+    </article>
+</section>
+{% endblock %}
